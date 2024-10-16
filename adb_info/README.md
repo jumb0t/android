@@ -1,4 +1,3 @@
-```markdown
 # Android System Information Collector
 
 ![Project Logo](https://i.imgur.com/YourImageLink.png) *(Замените ссылку на актуальное изображение при необходимости)*
@@ -473,4 +472,3 @@ pip install -r requirements.txt
 
 *Спасибо за использование **Android System Information Collector**!*
 
-```
