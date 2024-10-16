@@ -1,6 +1,5 @@
 # Android System Information Collector
 
-![Project Logo](https://i.imgur.com/YourImageLink.png) *(Замените ссылку на актуальное изображение при необходимости)*
 
 ## Описание
 
