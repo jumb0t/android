@@ -7,7 +7,6 @@ import sys
 import os
 from datetime import datetime
 from colorama import init, Fore, Style
-from tabulate import tabulate
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 # Инициализация colorama
@@ -153,9 +152,9 @@ class SystemInfoCollector:
         """Получение информации о Wi-Fi подключениях."""
         try:
             wifi_info = self.run_adb_command('shell dumpsys wifi')
+            return wifi_info
         except ADBError:
-            wifi_info = "N/A"
-        return wifi_info
+            return "N/A"
 
     def get_system_settings(self):
         """Получение системных настроек."""
@@ -319,6 +318,110 @@ class SystemInfoCollector:
 
         return introduction
 
+    # Дополнительные методы для сбора расширенной информации
+
+    def get_camera_info(self):
+        """Получение информации о камерах устройства."""
+        try:
+            camera_info = self.run_adb_command('shell dumpsys media.camera')
+        except ADBError:
+            camera_info = "N/A"
+        return camera_info
+
+    def get_bluetooth_info(self):
+        """Получение информации о Bluetooth устройства."""
+        try:
+            bluetooth_manager = self.run_adb_command('shell dumpsys bluetooth_manager')
+        except ADBError:
+            bluetooth_manager = "N/A"
+        try:
+            bluetooth_adapter = self.run_adb_command('shell dumpsys bluetooth_adapter')
+        except ADBError:
+            bluetooth_adapter = "N/A"
+        return {
+            'Bluetooth Manager': bluetooth_manager,
+            'Bluetooth Adapter': bluetooth_adapter
+        }
+
+    def get_security_settings(self):
+        """Получение информации о настройках безопасности устройства."""
+        try:
+            security_info = self.run_adb_command('shell dumpsys devicepolicy')
+        except ADBError:
+            security_info = "N/A"
+        return security_info
+
+    def get_nfc_info(self):
+        """Получение информации о NFC устройства."""
+        try:
+            nfc_info = self.run_adb_command('shell dumpsys nfc')
+        except ADBError:
+            nfc_info = "N/A"
+        return nfc_info
+
+    def get_usb_config(self):
+        """Получение информации о конфигурации USB устройства."""
+        try:
+            usb_info = self.run_adb_command('shell dumpsys usb')
+        except ADBError:
+            usb_info = "N/A"
+        return usb_info
+
+    def get_vpn_info(self):
+        """Получение информации о VPN соединениях устройства."""
+        try:
+            vpn_info = self.run_adb_command('shell dumpsys vpn')
+        except ADBError:
+            vpn_info = "N/A"
+        return vpn_info
+
+    def get_graphics_info(self):
+        """Получение информации о графических настройках устройства."""
+        try:
+            graphics_info = self.run_adb_command('shell dumpsys gfxinfo')
+        except ADBError:
+            graphics_info = "N/A"
+        return graphics_info
+
+    def get_firewall_info(self):
+        """Получение информации о фаерволле устройства."""
+        try:
+            firewall_info = self.run_adb_command('shell iptables -L')
+        except ADBError:
+            firewall_info = "N/A"
+        return firewall_info
+
+    def get_screen_settings(self):
+        """Получение разрешения и плотности экрана."""
+        try:
+            screen_size = self.run_adb_command('shell wm size')
+        except ADBError:
+            screen_size = "N/A"
+        try:
+            screen_density = self.run_adb_command('shell wm density')
+        except ADBError:
+            screen_density = "N/A"
+        return {
+            'Screen Size': screen_size,
+            'Screen Density': screen_density
+        }
+
+    def get_sim_info(self):
+        """Получение информации о SIM-картах устройства."""
+        try:
+            sim_info = self.run_adb_command('shell dumpsys telephony.registry')
+        except ADBError:
+            sim_info = "N/A"
+        return sim_info
+
+    def get_usb_details(self):
+        """Получение подробной информации о USB подключениях."""
+        try:
+            usb_details = self.run_adb_command('shell lsusb')
+        except ADBError:
+            usb_details = "N/A"
+        return usb_details
+
     def collect_all_info(self):
         """Сбор всей доступной информации о системе."""
         info = {}
@@ -341,9 +444,20 @@ class SystemInfoCollector:
             info['Memory Usage'] = self.get_memory_usage()
             info['Running Services'] = self.get_running_services()
             info['Running Processes'] = self.get_running_processes()
-            # Логи могут быть объемными, поэтому они не включены по умолчанию
-            # info['Kernel Logs'] = self.get_dmesg_logs()
-            # info['Event Logs'] = self.get_event_logs()
+            # Дополнительные данные
+            info['Camera Info'] = self.get_camera_info()
+            info['Bluetooth Info'] = self.get_bluetooth_info()
+            info['Security Settings'] = self.get_security_settings()
+            info['NFC Info'] = self.get_nfc_info()
+            info['USB Configuration'] = self.get_usb_config()
+            info['VPN Info'] = self.get_vpn_info()
+            info['Graphics Info'] = self.get_graphics_info()
+            info['Firewall Info'] = self.get_firewall_info()
+            info['Screen Settings'] = self.get_screen_settings()
+            info['SIM Info'] = self.get_sim_info()
+            info['USB Details'] = self.get_usb_details()
+            # Логи могут быть объемными, поэтому их можно включить по желанию
+            # info['System Logs'] = self.get_dmesg_logs()
             logging.info(f"Сбор информации завершен успешно для устройства {self.device}.")
         except ADBError as e:
             logging.error(f"Ошибка при сборе информации для устройства {self.device}: {e}")
@@ -391,6 +505,19 @@ class ReportGenerator:
             'Memory Usage': 'Текущая загрузка памяти устройства.',
             'Running Services': 'Список запущенных сервисов на устройстве.',
             'Running Processes': 'Список запущенных процессов на устройстве.',
+            'Camera Info': 'Информация о камерах устройства.',
+            'Bluetooth Manager': 'Состояние и настройки менеджера Bluetooth.',
+            'Bluetooth Adapter': 'Информация о адаптере Bluetooth.',
+            'Security Settings': 'Настройки безопасности устройства.',
+            'NFC Info': 'Состояние и настройки NFC.',
+            'USB Configuration': 'Конфигурация USB-подключений.',
+            'VPN Info': 'Информация о текущих VPN-соединениях.',
+            'Graphics Info': 'Информация о графических настройках устройства.',
+            'Firewall Info': 'Состояние и правила фаерволла устройства.',
+            'Screen Size': 'Разрешение экрана устройства.',
+            'Screen Density': 'Плотность пикселей экрана устройства.',
+            'SIM Info': 'Информация о SIM-картах устройства.',
+            'USB Details': 'Подробная информация о USB-подключениях устройства.',
             # Добавьте больше описаний по мере необходимости
         }
         return descriptions
@@ -535,7 +662,7 @@ class ReportGenerator:
         except IOError as e:
             logging.error(f"Не удалось сохранить HTML отчет в файл: {e}")
 
-    def save_text_report(self, filename='system_report.txt'):
+    def save_text_report(self, filename):
         """Сохранение текстового отчета в файл."""
         try:
             with open(filename, 'w', encoding='utf-8') as f:
@@ -592,8 +719,8 @@ def main():
             serial_number_clean = ''.join(c for c in serial_number if c.isalnum())
             if not serial_number_clean:
                 serial_number_clean = device.replace(':', '')
-            html_filename = f'system_report_{serial_number_clean}.html'
-            text_filename = f'system_report_{serial_number_clean}.txt'
+            html_filename = f'reports/system_report_{serial_number_clean}.html'
+            text_filename = f'reports/system_report_{serial_number_clean}.txt'
             reporter = ReportGenerator(system_info, serial_number_clean)
             reporter.print_report()
             reporter.save_html_report(html_filename)
@@ -604,4 +731,6 @@ def main():
             logging.exception(f"Неизвестная ошибка при обработке устройства {device}: {e}")
 
 if __name__ == '__main__':
+    # Создаем каталог для отчетов, если его нет
+    os.makedirs('reports', exist_ok=True)
     main()
