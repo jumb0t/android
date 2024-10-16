@@ -1,4 +1,3 @@
-```markdown
 # ADB Cleanup Script
 
 ![License](https://img.shields.io/github/license/yourusername/adb-cleanup)
