@@ -1,8 +1,8 @@
-# Modify Build Prop
+# build.prop_mod.py
 
 Автоматическое изменение файлов `build.prop` на Android устройствах через ADB.
 
-![Logo](https://example.com/logo.png) <!-- Замените на актуальное изображение, если необходимо -->
+
 
 ## Содержание
 
@@ -23,7 +23,7 @@
 
 ## Описание
 
-`modify_build_prop.py` — это Python-скрипт, предназначенный для автоматического изменения файлов `build.prop` на Android устройствах через [ADB (Android Debug Bridge)](https://developer.android.com/studio/command-line/adb). Скрипт поддерживает работу с несколькими устройствами одновременно, обеспечивает создание резервных копий, модификацию содержимого файлов `build.prop` согласно заданным параметрам и загрузку изменённых файлов обратно на устройство. 
+`build.prop_mod.py` — это Python-скрипт, предназначенный для автоматического изменения файлов `build.prop` на Android устройствах через [ADB (Android Debug Bridge)](https://developer.android.com/studio/command-line/adb). Скрипт поддерживает работу с несколькими устройствами одновременно, обеспечивает создание резервных копий, модификацию содержимого файлов `build.prop` согласно заданным параметрам и загрузку изменённых файлов обратно на устройство. 
 
 Основные возможности включают продвинутое логгирование с цветовой подсветкой, а также тщательную обработку исключений для обеспечения надёжности работы.
 
@@ -49,7 +49,7 @@
 
 ## Установка
 
-1. **Клонируйте репозиторий** или скачайте `modify_build_prop.py` напрямую.
+1. **Клонируйте репозиторий** или скачайте `build.prop_mod.py` напрямую.
 
    ```bash
    git clone https://github.com/yourusername/modify_build_prop.git
@@ -77,7 +77,7 @@
 Для запуска скрипта используйте команду:
 
 ```bash
-python3 modify_build_prop.py
+python3 build.prop_mod.py
 ```
 
 Убедитесь, что ADB запущен и ваше устройство подключено к компьютеру с включённым режимом отладки по USB.
@@ -89,7 +89,7 @@ python3 modify_build_prop.py
    Скрипт автоматически обнаружит подключённые устройства и предложит выбрать одно из них для обработки.
 
    ```bash
-   python3 modify_build_prop.py
+   python3 build.prop_mod.py
    ```
 
 2. **Работа с несколькими устройствами**:
@@ -129,8 +129,8 @@ python3 modify_build_prop.py
 **Пример лога в консоли**:
 
 ```
-2024-10-19 12:00:00 INFO    - main       - modify_build_prop.py:250 - Запуск скрипта Modify Build Prop
-2024-10-19 12:00:05 INFO    - process_device - modify_build_prop.py:180 - Начало обработки устройства device_serial_1...
+2024-10-19 12:00:00 INFO    - main       - build.prop_mod.py:250 - Запуск скрипта Modify Build Prop
+2024-10-19 12:00:05 INFO    - process_device - build.prop_mod.py:180 - Начало обработки устройства device_serial_1...
 ...
 ```
 
@@ -174,18 +174,10 @@ ro.build.fingerprint=samsung/beyond1lteeea/beyond1:12/SP1A.210812.016/G973FXXSGH
 
 ## Поддержка
 
-Если у вас возникли вопросы или проблемы с использованием скрипта, вы можете связаться с нами:
 
-- **Email**: support@example.com
-- **GitHub Issues**: [Issues](https://github.com/yourusername/modify_build_prop/issues)
-- **Telegram**: [@YourTelegram](https://t.me/yourtelegram)
-
-Мы всегда готовы помочь и рады вашим отзывам!
 
 ## Лицензия
 
 Этот проект лицензирован под лицензией [MIT License](LICENSE).
 
 ---
-
-© 2024 OpenAI ChatGPT. Все права защищены.
